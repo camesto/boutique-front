@@ -28,3 +28,18 @@ dist/
 .env
 .env.*
 !.env.example
+# Configuration locale et fichiers générés
+node_modules/
+.env
+.env.*
+!.env.example
+.tmp/
+.cache/
+.strapi/
+dist/
+build/
+backend/public/uploads/
+catalogue.tar
+strapi-code.tar.gz
+
+.strapi-updater.json
