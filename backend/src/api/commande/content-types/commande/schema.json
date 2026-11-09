@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "commandes",
+  "info": {
+    "singularName": "commande",
+    "pluralName": "commandes",
+    "displayName": "Commande"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "numero": {
+      "type": "string"
+    },
+    "total": {
+      "type": "decimal"
+    },
+    "statut": {
+      "type": "enumeration",
+      "enum": [
+        "en-attente",
+        "validee"
+      ]
+    },
+    "contenu": {
+      "type": "json"
+    },
+    "email": {
+      "type": "email"
+    }
+  }
+}

@@ -1,16 +1,53 @@
-# React + Vite
+# SÉLECTION — Projet CMS
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Boutique React qui affiche les produits enregistrés dans Strapi.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Git, Node.js et npm
+- L’archive `catalogue.tar` pour retrouver les produits et les images de la démo. Elle est à récupérer auprès de l’équipe.
 
-## React Compiler
+## 1. Démarrer Strapi
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Depuis la racine du dépôt, ouvre un premier terminal.
 
-## Expanding the Oxlint configuration
+```bash
+cd backend
+npm ci
+mkdir -p public/uploads
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Pour le premier lancement, crée le fichier `.env` local à partir du modèle. La commande génère des clés aléatoires et conserve un éventuel `.env` déjà présent.
+
+```bash
+node -e 'const fs = require("node:fs"); const { randomBytes } = require("node:crypto"); const modele = fs.readFileSync(".env.example", "utf8"); const env = modele.replace(/remplacer(?:-cle-[12])?/g, () => randomBytes(32).toString("hex")); if (!fs.existsSync(".env")) fs.writeFileSync(".env", env, { flag: "wx", mode: 0o600 });'
+```
+
+Pour retrouver le catalogue de démo, place `catalogue.tar` dans `backend/`, puis lance l’import **sur une base locale vide**. L’import remplace les données de la base de destination.
+
+```bash
+npm run strapi import -- -f catalogue.tar
+```
+
+Démarre ensuite Strapi.
+
+```bash
+npm run develop
+```
+
+- Administration Strapi — http://localhost:1337/admin
+- API des produits — http://localhost:1337/api/produits?populate=*
+
+Si tu pars sans archive, crée et publie des produits dans Strapi. Si l’API répond `403`, vérifie que le rôle Public a la permission `find` sur les produits.
+
+## 2. Démarrer React
+
+Garde Strapi ouvert. Dans un deuxième terminal, repars de la racine du dépôt.
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Ouvre l’adresse `Local` affichée par Vite. React se connecte à Strapi sur `http://localhost:1337`.
