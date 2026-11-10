@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import Auth from './Auth.jsx'
 
 const api = (import.meta.env.VITE_STRAPI_URL || 'http://localhost:1337').replace(/\/$/, '')
 const format = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' })
@@ -36,6 +37,7 @@ export default function App() {
   const [quantites, setQuantites] = useState(lirePanier)
   const [produitActif, setProduitActif] = useState(null)
   const [email, setEmail] = useState('')
+  const [session, setSession] = useState(null)
   const [envoi, setEnvoi] = useState(false)
   const [erreurCommande, setErreurCommande] = useState('')
   const [commande, setCommande] = useState(null)
@@ -43,6 +45,13 @@ export default function App() {
   const fiche = useRef(null)
   const panier = useRef(null)
   const verrou = useRef(false)
+
+  function gererSession(nouvelleSession) {
+    setSession(nouvelleSession)
+    if (nouvelleSession?.user?.email) {
+      setEmail(nouvelleSession.user.email)
+    }
+  }
 
   useEffect(() => {
     const controller = new AbortController()
@@ -161,6 +170,7 @@ export default function App() {
         <div className="cadre navigation">
           <a className="marque" href="#"><span aria-hidden="true">◈</span> SÉLECTION<span className="point">.</span></a>
           <a className="lien-catalogue" href="#catalogue">Catalogue</a>
+          <Auth onAuthChange={gererSession} />
           <button className="bouton bouton-sombre" onClick={() => panier.current.showModal()}>
             Panier <span className="compteur">{nombre}</span>
           </button>
@@ -273,7 +283,7 @@ export default function App() {
           </ul>
           <form className="commande" onSubmit={commander}>
             <div className="total"><strong>Total</strong><strong>{euros(total)}</strong></div>
-            <label htmlFor="email">Adresse e-mail</label>
+            <label htmlFor="email">Adresse e-mail {session ? "(compte connecté)" : ""}</label>
             <input id="email" type="email" autoComplete="email" placeholder="toi@exemple.fr"
               value={email} onChange={(event) => setEmail(event.target.value)} required disabled={envoi} />
             {erreurCommande && <p className="erreur" role="alert">{erreurCommande}</p>}
