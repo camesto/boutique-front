@@ -1,11 +1,12 @@
 # SÉLECTION — Projet CMS
 
-Boutique React qui affiche les produits enregistrés dans Strapi.
+Boutique en ligne développée avec React et Strapi. Les produits sont enregistrés dans Strapi et affichés sur le site React grâce à l'API REST.
 
 ## Prérequis
 
-- Git, Node.js et npm
-- L’archive `catalogue.tar` pour retrouver les produits et les images de la démo. Elle est à récupérer auprès de l’équipe.
+- Git
+- Node.js et npm
+- L'archive `backend/catalogue.tar`, incluse dans ce dépôt GitHub pour récupérer les données et les images de démonstration.
 
 ## 1. Démarrer Strapi
 
@@ -17,28 +18,38 @@ npm ci
 mkdir -p public/uploads
 ```
 
-Pour le premier lancement, crée le fichier `.env` local à partir du modèle. La commande génère des clés aléatoires et conserve un éventuel `.env` déjà présent.
+### Configuration de l'environnement
+
+Pour le premier lancement, crée le fichier `.env` local à partir du modèle `.env.example`.
+
+La commande génère des clés aléatoires et conserve un éventuel `.env` déjà présent.
 
 ```bash
 node -e 'const fs = require("node:fs"); const { randomBytes } = require("node:crypto"); const modele = fs.readFileSync(".env.example", "utf8"); const env = modele.replace(/remplacer(?:-cle-[12])?/g, () => randomBytes(32).toString("hex")); if (!fs.existsSync(".env")) fs.writeFileSync(".env", env, { flag: "wx", mode: 0o600 });'
 ```
 
-Pour retrouver le catalogue de démo, place `catalogue.tar` dans `backend/`, puis lance l’import **sur une base locale vide**. L’import remplace les données de la base de destination.
+### Importer les données de démonstration
+
+L'archive `catalogue.tar` se trouve déjà dans le dossier `backend/`.
+
+Sur une base de données locale vide, lance l'import :
 
 ```bash
 npm run strapi import -- -f catalogue.tar
 ```
 
-Démarre ensuite Strapi.
+**Attention :** l'import remplace les données présentes dans la base de destination. Ne le lance pas sur une base contenant des données à conserver.
+
+### Lancer Strapi
 
 ```bash
 npm run develop
 ```
 
-- Administration Strapi — http://localhost:1337/admin
-- API des produits — http://localhost:1337/api/produits?populate=*
+- **Administration Strapi :** http://localhost:1337/admin
+- **API des produits :** http://localhost:1337/api/produits?populate=*
 
-Si tu pars sans archive, crée et publie des produits dans Strapi. Si l’API répond `403`, vérifie que le rôle Public a la permission `find` sur les produits.
+Si l'API répond `403`, vérifie que le rôle Public possède la permission `find` sur les produits dans les paramètres des permissions Strapi.
 
 ## 2. Démarrer React
 
@@ -50,4 +61,16 @@ npm ci
 npm run dev
 ```
 
-Ouvre l’adresse `Local` affichée par Vite. React se connecte à Strapi sur `http://localhost:1337`.
+Ouvre l'adresse `Local` affichée par Vite.
+
+React se connecte à Strapi sur :
+
+```text
+http://localhost:1337
+```
+
+## 3. Accès au projet
+
+- **Site React :** adresse locale affichée par Vite.
+- **Administration Strapi :** http://localhost:1337/admin
+- **API REST :** http://localhost:1337/api/produits?populate=*
