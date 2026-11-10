@@ -39,7 +39,6 @@ node_modules/
 dist/
 build/
 backend/public/uploads/
-catalogue.tar
 strapi-code.tar.gz
 
 .strapi-updater.json
